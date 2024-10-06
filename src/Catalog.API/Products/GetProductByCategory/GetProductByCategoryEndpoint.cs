@@ -1,6 +1,4 @@
-﻿using Catalog.API.Products.CreateProduct;
-
-namespace Catalog.API.Products.GetProductByCategory;
+﻿namespace Catalog.API.Products.GetProductByCategory;
 
 public record GetProductByCategoryResponse(IEnumerable<Product> Products);
 
@@ -17,7 +15,7 @@ public class GetProductByCategoryEndpoint : ICarterModule
             return Results.Ok(response);
         })
         .WithName("GetProductByCategory")
-        .Produces<CreateProductResponse>(StatusCodes.Status200OK)
+        .Produces<GetProductByCategoryResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Get Product By Category")
         .WithDescription("Get Product By Category");
