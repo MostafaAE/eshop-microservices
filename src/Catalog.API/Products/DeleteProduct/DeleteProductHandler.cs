@@ -24,7 +24,7 @@ public class DeleteProductHandler(IDocumentSession session)
 
         if (product is null)
         {
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(command.Id);
         }
 
         session.Delete(product);
