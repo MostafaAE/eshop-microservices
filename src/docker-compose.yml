@@ -10,5 +10,10 @@ services:
       context: .
       dockerfile: Catalog.API/Dockerfile
 
+  basketdb:
+    image: postgres
+
 volumes:
   postgres_catalog:
+  postgres_basket:
+
