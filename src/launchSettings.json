@@ -5,7 +5,10 @@
       "commandVersion": "1.0",
       "serviceActions": {
         "catalogdb": "StartWithoutDebugging",
-        "catalog.api": "StartDebugging"
+        "basketdb": "StartWithoutDebugging",
+        "distributedcache": "StartWithoutDebugging",
+        "catalog.api": "StartWithoutDebugging",
+        "basket.api": "StartWithoutDebugging"
       }
     }
   }
