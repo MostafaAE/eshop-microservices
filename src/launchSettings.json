@@ -6,7 +6,8 @@
       "serviceActions": {
         "catalogdb": "StartWithoutDebugging",
         "basketdb": "StartWithoutDebugging",
-        "catalog.api": "StartDebugging"
+        "distributedcache": "StartWithoutDebugging",
+        "catalog.api": "StartWithoutDebugging"
       }
     }
   }
