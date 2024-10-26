@@ -22,4 +22,19 @@ public class DiscountService(DiscountContext dbContext, ILogger<DiscountService>
 
         return couponModel;
     }
+
+    public override async Task<CouponModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
+    {
+        var coupon = request.Coupon.Adapt<Coupon>();
+
+        if (coupon is null)
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid request object."));
+
+        await dbContext.AddAsync(coupon);
+        await dbContext.SaveChangesAsync();
+
+        logger.LogInformation("Discount is successfully created. ProductName: {ProductName}, Amount: {amount}", coupon.ProductName, coupon.Amount);
+        var couponModel = coupon.Adapt<CouponModel>();
+        return couponModel;
+    }
 }
