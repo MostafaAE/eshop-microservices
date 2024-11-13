@@ -41,4 +41,14 @@ public class Order : Aggregate<OrderId>
         return order;
     }
 
+    public void Update(OrderName orderName, Address shippingAddress, Address billingAddress, Payment payment, OrderStatus orderStatus)
+    {
+        OrderName = orderName;
+        ShippingAddress = shippingAddress;
+        BillingAddress = billingAddress;
+        Payment = payment;
+        Status = orderStatus;
+
+        AddDomainEvent(new OrderUpdatedEvent(this));
+    }
 }
