@@ -1,5 +1,6 @@
 ﻿
 using Ordering.Application.Extensions;
+using Ordering.Application.Orders.Queries.GetOrdersByCustomer;
 
 namespace Ordering.Application.Orders.Queries.GetOrderByCustomer;
 public class GetOrdersByCustomerHandler(IApplicationDbContext dbContext)
