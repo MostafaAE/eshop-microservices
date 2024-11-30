@@ -33,5 +33,10 @@ public class UpdateOrderHandler(IApplicationDbContext dbContext)
             billingAddress: updatedBillingAddress,
             payment: updatedPayment,
             orderStatus: orderDto.OrderStatus);
+
+        foreach (var orderItemDto in orderDto.OrderItems)
+        {
+            order.Add(ProductId.Of(orderItemDto.ProductId), orderItemDto.Quantity, orderItemDto.Price);
+        }
     }
 }
