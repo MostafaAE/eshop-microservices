@@ -11,7 +11,8 @@
         "basket.api": "StartWithoutDebugging",
         "discount.grpc": "StartWithoutDebugging",
         "ordering.api": "StartWithoutDebugging",
-        "yarpapigateway": "StartDebugging"
+        "yarpapigateway": "StartDebugging",
+        "shopping.web": "StartDebugging"
       }
     }
   }
