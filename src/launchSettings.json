@@ -9,7 +9,8 @@
         "distributedcache": "StartWithoutDebugging",
         "catalog.api": "StartWithoutDebugging",
         "basket.api": "StartWithoutDebugging",
-        "discount.grpc": "StartWithoutDebugging"
+        "discount.grpc": "StartWithoutDebugging",
+        "ordering.api": "StartWithoutDebugging"
       }
     }
   }
