@@ -10,7 +10,8 @@
         "catalog.api": "StartWithoutDebugging",
         "basket.api": "StartWithoutDebugging",
         "discount.grpc": "StartWithoutDebugging",
-        "ordering.api": "StartWithoutDebugging"
+        "ordering.api": "StartWithoutDebugging",
+        "yarpapigateway": "StartDebugging"
       }
     }
   }
