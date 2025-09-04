@@ -1,6 +1,7 @@
 using Discount.Grpc.Data;
 using Discount.Grpc.Services;
 using Microsoft.EntityFrameworkCore;
+using BuildingBlocks.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc();
 builder.Services.AddDbContext<DiscountContext>(opts =>
         opts.UseSqlite(builder.Configuration.GetConnectionString("Database")));
+
+builder.Services.AddAppObservability(builder.Configuration);
 
 var app = builder.Build();
 

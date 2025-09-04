@@ -1,3 +1,5 @@
+using BuildingBlocks.Observability;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -20,6 +22,7 @@ builder.Services.AddRefitClient<IOrderingService>()
         c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]!);
     });
 
+builder.Services.AddAppObservability(builder.Configuration);
 
 var app = builder.Build();
 
