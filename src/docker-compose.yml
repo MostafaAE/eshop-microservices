@@ -18,6 +18,12 @@ services:
 
   eshop-jaeger:
     image: jaegertracing/all-in-one:latest
+  
+  prometheus:
+    image: prom/prometheus:latest
+
+  grafana:
+    image: grafana/grafana:latest
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi

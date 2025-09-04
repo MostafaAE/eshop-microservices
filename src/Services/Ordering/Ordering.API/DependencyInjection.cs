@@ -1,5 +1,6 @@
 ﻿using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using BuildingBlocks.Observability;
 
 namespace Ordering.API;
 
@@ -19,6 +20,9 @@ public static class DependencyInjection
     public static WebApplication UseApiServices(this WebApplication app)
     {
         app.MapCarter();
+
+        // Map observability endpoints
+        app.MapAppObservability();
 
         app.UseExceptionHandler(options => { });
         app.UseHealthChecks("/health",

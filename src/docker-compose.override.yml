@@ -58,6 +58,32 @@ services:
         - "4317:4317"
         - "4318:4318"
         - "16686:16686"
+  
+  prometheus:
+    container_name: eshop-prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./Observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - catalog.api
+      - basket.api
+      - discount.grpc
+      - ordering.api
+      - yarpapigateway
+      - shopping.web
+
+  grafana:
+    container_name: eshop-grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
 
   catalog.api:
     environment:
