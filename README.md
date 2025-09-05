@@ -3,7 +3,7 @@
 ![microservices](https://github.com/aspnetrun/run-aspnetcore-microservices/assets/1147445/efe5e688-67f2-4ddd-af37-d9d3658aede4)
 
 ## Project Overview
-This project implements e-commerce modules (Catalog, Basket, Discount, and Ordering) with both NoSQL (DocumentDb, Redis) and Relational databases (PostgreSQL, SQL Server). It uses RabbitMQ for event-driven communication and YARP API Gateway for routing.
+This project implements an e-commerce platform with modular microservices (Catalog, Basket, Discount, Ordering, API Gateway, and WebUI). It integrates event-driven messaging, polyglot persistence, and full observability (metrics, logs, and traces) using OpenTelemetry and modern observability tools.
 
 ## Modules and Features
 #### Catalog Microservice
@@ -56,25 +56,39 @@ This project implements e-commerce modules (Catalog, Basket, Discount, and Order
 
 ## Observability & Monitoring
 
-This project integrates **metrics, tracing, and logging** to provide full observability into the microservices.
+This project implements a comprehensive **observability stack** using OpenTelemetry for unified telemetry data collection, providing full visibility into metrics, traces, and logs across all microservices.
 
-### Metrics (Prometheus + Grafana)
-* **Prometheus** scrapes metrics from each microservice on `/metrics`.
-* **Grafana** provides dashboards for visualizing service performance.
+### Architecture Overview
+The observability architecture follows the **OpenTelemetry Collector pattern** where:
+- **All microservices** export instrumentation data (metrics, traces, logs) to a centralized **OpenTelemetry Collector**
+- **OpenTelemetry Collector** acts as a telemetry data pipeline, receiving, processing, and routing observability data to appropriate backends
+- **Jaeger** receives distributed traces for trace analysis
+- **Loki** receives structured logs for log aggregation and search
+- **Prometheus** scrapes metrics from the OpenTelemetry Collector for monitoring
+- **Grafana** provides unified dashboards for visualizing metrics and logs with automatic correlation
+  
+### Metrics (OpenTelemetry → Prometheus → Grafana)
+* **OpenTelemetry** collects metrics from all microservices using auto-instrumentation
+* **OpenTelemetry Collector** processes and exposes metrics to **Prometheus**
+* **Prometheus** scrapes metrics from the OpenTelemetry Collector and stores them as time-series metrics data
+* **Grafana** provides rich dashboards for service performance visualization
 ![Grafana Metrics](https://github.com/user-attachments/assets/bddd9c51-0707-481f-9bc8-b14415211006)
 ---
 
-### Tracing (Jaeger + OpenTelemetry)
-* Each service emits distributed traces via **OpenTelemetry**.
-* Supported instrumentation includes: ASP.NET Core, HTTP Client, gRPC, SQL Client, and MassTransit.
-* Traces are exported to **Jaeger** for analysis.
+### Tracing (OpenTelemetry → Jaeger)
+* **OpenTelemetry** generates distributed traces across all microservice interactions
+* **OpenTelemetry Collector** receives and exports traces to **Jaeger**
+* **Jaeger** provides distributed tracing analysis with service maps and trace visualization
+* Full request flow tracking from API Gateway through all downstream services
 ![Jaeger Traces](https://github.com/user-attachments/assets/94ae24aa-770f-4dd0-a876-9dfd2da29b87)
 ---
 
-### Logging (Loki + Promtail + Grafana)
-* **Promtail** collects logs from Docker containers.  
-* **Loki** stores and indexes logs.  
-* Logs are available in Grafana using the **Explore** tab.  
+### Logging (OpenTelemetry → Loki → Grafana)
+* **OpenTelemetry** collects structured logs from all microservices with automatic context enrichment
+* **OpenTelemetry Collector** processes and forwards logs to **Loki** using native OTLP support
+* **Loki** stores and indexes logs with automatic label extraction from OpenTelemetry attributes
+* **Grafana** provides log exploration and correlation with metrics and traces
+![Loki Logs](https://github.com/user-attachments/assets/4f9c1c45-b8c7-4a19-ad65-91dce1ec5653)
 ---
 
 ## Run The Project
@@ -98,12 +112,10 @@ Ensure the following tools are installed on your system:
     * Explore the ShoppingApp to interact with microservices via the YARP API Gateway.
 
 ---
-
 ## 🔗 Quick Access (Default Ports)
-| Service          | URL                                   |
-|------------------|---------------------------------------|
-| WebUI ShoppingApp| https://localhost:6065                |
-| Prometheus       | http://localhost:9090                 |
-| Grafana          | http://localhost:3000 (admin/admin)   |
-| Jaeger           | http://localhost:16686                |
-| Loki (via Grafana Explore) | http://localhost:3000       |
+| Service          | URL                                   | Description                    |
+|------------------|---------------------------------------|--------------------------------|
+| WebUI ShoppingApp| https://localhost:6065                | Main e-commerce application    |
+| Grafana          | http://localhost:3000 (admin/admin)   | Metrics & logs dashboards      |
+| Jaeger           | http://localhost:16686                | Distributed tracing UI         |
+| Prometheus       | http://localhost:9090                 | Metrics storage & queries      |

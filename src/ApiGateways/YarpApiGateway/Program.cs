@@ -19,9 +19,6 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
 
 var app = builder.Build();
 
-// Map observability endpoints
-app.MapAppObservability();
-
 app.UseRateLimiter();
 
 app.MapReverseProxy();

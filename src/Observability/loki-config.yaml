@@ -2,7 +2,23 @@ auth_enabled: false
 
 server:
   http_listen_port: 3100
+  grpc_listen_port: 9096
+  log_level: info
 
+# Common configuration - required for Loki 3.x
+common:
+  instance_addr: 127.0.0.1
+  path_prefix: /loki
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+# Ingester configuration
 ingester:
   lifecycler:
     address: 127.0.0.1
@@ -10,35 +26,74 @@ ingester:
       kvstore:
         store: inmemory
       replication_factor: 1
-  chunk_idle_period: 5m
+    final_sleep: 0s
+  chunk_idle_period: 1h
   max_chunk_age: 1h
-  chunk_target_size: 1536000
+  chunk_target_size: 1048576
   chunk_retain_period: 30s
 
-limits_config:
-  volume_enabled: true
-
+# Schema configuration for Loki 3.x
 schema_config:
   configs:
-    - from: 2024-01-01
+    - from: 2020-10-24
       store: tsdb
       object_store: filesystem
       schema: v13
       index:
         prefix: index_
         period: 24h
-      chunks:
-        prefix: chunk_
-        period: 24h
 
+# Storage configuration
 storage_config:
   tsdb_shipper:
-    active_index_directory: /loki/index
-    cache_location: /loki/cache
-    shared_store: filesystem
+    active_index_directory: /loki/tsdb-index
+    cache_location: /loki/tsdb-cache
   filesystem:
     directory: /loki/chunks
 
-compactor:
-  working_directory: /loki/compactor
-  shared_store: filesystem
+# Limits configuration - simplified without retention
+limits_config:
+  # Allow structured metadata for OTLP logs
+  allow_structured_metadata: true
+  max_line_size: 256000
+  max_line_size_truncate: false
+  
+  # Rate limiting
+  ingestion_rate_mb: 16
+  ingestion_burst_size_mb: 32
+  max_streams_per_user: 10000
+  max_global_streams_per_user: 5000
+
+  # Query limits
+  max_query_series: 500
+  max_query_parallelism: 16
+  max_query_length: 12000h
+  max_concurrent_tail_requests: 10
+
+  # Sample and error handling
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h
+
+# Query range configuration
+query_range:
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 100
+
+# Ruler configuration (optional)
+ruler:
+  storage:
+    type: local
+    local:
+      directory: /loki/rules
+  rule_path: /loki/rules
+  ring:
+    kvstore:
+      store: inmemory
+  enable_api: true
+
+# Analytics configuration (optional)
+analytics:
+  reporting_enabled: false
