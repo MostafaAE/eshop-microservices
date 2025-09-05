@@ -16,6 +16,9 @@ services:
   messagebroker:
     image: rabbitmq:management
 
+  eshop-jaeger:
+    image: jaegertracing/all-in-one:latest
+
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
     build:

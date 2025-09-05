@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.RateLimiting;
+using BuildingBlocks.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+
+builder.Services.AddAppObservability(builder.Configuration);
 
 builder.Services.AddRateLimiter(rateLimiterOptions =>
 {

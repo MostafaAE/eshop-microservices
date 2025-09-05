@@ -1,3 +1,4 @@
+using BuildingBlocks.Observability;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
@@ -11,6 +12,8 @@ builder.Services.AddMediatR(config =>
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
     config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
+
+builder.Services.AddAppObservability(builder.Configuration);
 
 builder.Services.AddMarten(opts =>
 {
