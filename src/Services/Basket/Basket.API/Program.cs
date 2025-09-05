@@ -66,6 +66,9 @@ var app = builder.Build();
 
 app.MapCarter();
 
+// Map observability endpoints
+app.MapAppObservability();
+
 app.UseExceptionHandler(options => { });
 
 app.UseHealthChecks("/health",
