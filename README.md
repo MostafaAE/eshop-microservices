@@ -52,6 +52,29 @@ This project implements e-commerce modules (Catalog, Basket, Discount, and Order
 #### Docker Compose Setup
 * Containerizes microservices and databases.
 
+---
+
+## Observability & Monitoring
+
+This project integrates **metrics, tracing, and logging** to provide full observability into the microservices.
+
+### Metrics (Prometheus + Grafana)
+* **Prometheus** scrapes metrics from each microservice on `/metrics`.
+* **Grafana** provides dashboards for visualizing service performance.
+---
+
+### Tracing (Jaeger + OpenTelemetry)
+* Each service emits distributed traces via **OpenTelemetry**.
+* Supported instrumentation includes: ASP.NET Core, HTTP Client, gRPC, SQL Client, and MassTransit.
+* Traces are exported to **Jaeger** for analysis.
+---
+
+### Logging (Loki + Promtail + Grafana)
+* **Promtail** collects logs from Docker containers.  
+* **Loki** stores and indexes logs.  
+* Logs are available in Grafana using the **Explore** tab.  
+---
+
 ## Run The Project
 ### Prerequisites
 Ensure the following tools are installed on your system:
@@ -65,9 +88,20 @@ Ensure the following tools are installed on your system:
 3. Run the project:
     * Open the solution in Visual Studio, set docker-compose as the startup project, and start without debugging.
     * Alternatively, execute the following command in the root directory:
-    ```csharp
+    ```bash
     docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
     ```
 4. Access the Web UI:
     * Open your browser and navigate to https://localhost:6065.
     * Explore the ShoppingApp to interact with microservices via the YARP API Gateway.
+
+---
+
+## 🔗 Quick Access (Default Ports)
+| Service          | URL                                   |
+|------------------|---------------------------------------|
+| WebUI ShoppingApp| https://localhost:6065                |
+| Prometheus       | http://localhost:9090                 |
+| Grafana          | http://localhost:3000 (admin/admin)   |
+| Jaeger           | http://localhost:16686                |
+| Loki (via Grafana Explore) | http://localhost:3000       |
