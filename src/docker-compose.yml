@@ -25,6 +25,12 @@ services:
   grafana:
     image: grafana/grafana:latest
 
+  loki:
+    image: grafana/loki:2.9.0
+
+  promtail:
+    image: grafana/promtail:2.9.0
+
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
     build:

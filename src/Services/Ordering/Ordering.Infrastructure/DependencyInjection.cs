@@ -1,5 +1,4 @@
-﻿using BuildingBlocks.Observability;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ordering.Application.Data;
@@ -24,8 +23,6 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-
-        services.AddAppObservability(configuration);
 
         return services;
     }

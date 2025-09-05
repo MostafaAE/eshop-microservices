@@ -1,9 +1,13 @@
+using BuildingBlocks.Observability;
 using Ordering.API;
 using Ordering.Application;
 using Ordering.Infrastructure;
 using Ordering.Infrastructure.Data.Extensions;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddAppObservability();
 
 builder.Services
     .AddApplicationServices(builder.Configuration)

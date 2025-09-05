@@ -16,7 +16,7 @@ builder.Services.AddMediatR(config =>
     config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
-builder.Services.AddAppObservability(builder.Configuration);
+builder.AddAppObservability();
 
 // Data services
 builder.Services.AddMarten(opts =>

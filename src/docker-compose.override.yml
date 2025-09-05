@@ -85,6 +85,27 @@ services:
     depends_on:
       - prometheus
 
+  loki:
+    container_name: eshop-loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./Observability/loki-config.yaml:/etc/loki/config.yaml
+      - ./Observability/loki-data:/loki
+      - ./Observability/loki-wal:/wal
+    command: -config.file=/etc/loki/config.yaml
+
+  promtail:
+    container_name: eshop-promtail
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./Observability/promtail.yaml:/etc/promtail/promtail.yaml:ro
+    command: -config.file=/etc/promtail/promtail.yaml
+    depends_on:
+      - loki
+
+
   catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

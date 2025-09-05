@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
-builder.Services.AddAppObservability(builder.Configuration);
+builder.AddAppObservability();
 
 builder.Services.AddRateLimiter(rateLimiterOptions =>
 {
