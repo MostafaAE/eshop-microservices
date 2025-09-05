@@ -26,9 +26,6 @@ builder.AddAppObservability();
 
 var app = builder.Build();
 
-// Map observability endpoints
-app.MapAppObservability();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

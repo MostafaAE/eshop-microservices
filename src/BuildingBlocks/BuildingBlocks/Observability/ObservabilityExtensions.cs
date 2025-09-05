@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
@@ -17,6 +16,9 @@ public static class ObservabilityExtensions
                   ?? builder.Configuration["ServiceName"]
                   ?? AppDomain.CurrentDomain.FriendlyName;
 
+        var otlpEndpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]
+                  ?? "http://otel-collector:4318";
+
         // Traces & Metrics
         builder.Services.AddOpenTelemetry()
             .ConfigureResource(r => r.AddService(serviceName))
@@ -27,13 +29,19 @@ public static class ObservabilityExtensions
                 .AddSqlClientInstrumentation()
                 .AddMassTransitInstrumentation()
                 .AddSource(serviceName)
-                .AddOtlpExporter()
+                .AddOtlpExporter(o =>
+                {
+                    o.Endpoint = new Uri(otlpEndpoint);
+                })
             )
             .WithMetrics(metrics => metrics
                 .AddAspNetCoreInstrumentation()
                 .AddRuntimeInstrumentation()
                 .AddProcessInstrumentation()
-                .AddPrometheusExporter()
+                .AddOtlpExporter(o =>
+                {
+                    o.Endpoint = new Uri(otlpEndpoint);
+                })
             );
 
         // Logs
@@ -42,14 +50,12 @@ public static class ObservabilityExtensions
             o.IncludeScopes = true;
             o.IncludeFormattedMessage = true;
             o.ParseStateValues = true;
+            o.AddOtlpExporter(opt =>
+            {
+                opt.Endpoint = new Uri(otlpEndpoint);
+            });
         });
 
         return builder;
-    }
-
-    public static IEndpointRouteBuilder MapAppObservability(this IEndpointRouteBuilder endpoints)
-    {
-        endpoints.MapPrometheusScrapingEndpoint();
-        return endpoints;
     }
 }

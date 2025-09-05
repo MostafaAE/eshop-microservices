@@ -51,16 +51,14 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-  eshop-jaeger:
-    container_name: eshop-jaeger
+  jaeger:
+    container_name: jaeger
     restart: always
-    ports: 
-        - "4317:4317"
-        - "4318:4318"
+    ports:
         - "16686:16686"
   
   prometheus:
-    container_name: eshop-prometheus
+    container_name: prometheus
     restart: always
     ports:
       - "9090:9090"
@@ -75,7 +73,7 @@ services:
       - shopping.web
 
   grafana:
-    container_name: eshop-grafana
+    container_name: grafana
     restart: always
     ports:
       - "3000:3000"
@@ -86,7 +84,7 @@ services:
       - prometheus
 
   loki:
-    container_name: eshop-loki
+    container_name: loki
     ports:
       - "3100:3100"
     volumes:
@@ -95,16 +93,19 @@ services:
       - ./Observability/loki-wal:/wal
     command: -config.file=/etc/loki/config.yaml
 
-  promtail:
-    container_name: eshop-promtail
+  otel-collector:
+    container_name: otel-collector
+    restart: always
+    command: ["--config=/etc/otel-collector-config.yaml"]
     volumes:
+      - ./Observability/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./Observability/promtail.yaml:/etc/promtail/promtail.yaml:ro
-    command: -config.file=/etc/promtail/promtail.yaml
+    ports:
+      - "4317:4317"   # gRPC for OTLP
+      - "4318:4318"   # HTTP for OTLP
     depends_on:
+      - jaeger
       - loki
-
 
   catalog.api:
     environment:
@@ -112,7 +113,8 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres;Include Error Detail=true
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://eshop-jaeger:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_SERVICE_NAME=catalog-api
     depends_on:
       - catalogdb
@@ -134,7 +136,8 @@ services:
       - MessageBroker__Host=amqp://ecommerce-mq:5672
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://eshop-jaeger:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_SERVICE_NAME=basket-api
     depends_on:
       - basketdb
@@ -154,7 +157,8 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Data Source=discountdb
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://eshop-jaeger:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_SERVICE_NAME=discount-grpc
     ports:
       - "6002:8080"
@@ -173,7 +177,8 @@ services:
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
       - FeatureManagement__OrderFullfilment=false 
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://eshop-jaeger:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_SERVICE_NAME=ordering-api
     depends_on:
       - orderdb
@@ -190,7 +195,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://eshop-jaeger:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_SERVICE_NAME=yarpapigateway
     depends_on:
       - catalog.api
@@ -209,7 +215,8 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ApiSettings__GatewayAddress=http://yarpapigateway:8080
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://eshop-jaeger:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       - OTEL_SERVICE_NAME=shopping-web
     depends_on:
       - yarpapigateway
