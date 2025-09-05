@@ -61,12 +61,14 @@ This project integrates **metrics, tracing, and logging** to provide full observ
 ### Metrics (Prometheus + Grafana)
 * **Prometheus** scrapes metrics from each microservice on `/metrics`.
 * **Grafana** provides dashboards for visualizing service performance.
+![Grafana Metrics](https://github.com/user-attachments/assets/bddd9c51-0707-481f-9bc8-b14415211006)
 ---
 
 ### Tracing (Jaeger + OpenTelemetry)
 * Each service emits distributed traces via **OpenTelemetry**.
 * Supported instrumentation includes: ASP.NET Core, HTTP Client, gRPC, SQL Client, and MassTransit.
 * Traces are exported to **Jaeger** for analysis.
+![Jaeger Traces](https://github.com/user-attachments/assets/94ae24aa-770f-4dd0-a876-9dfd2da29b87)
 ---
 
 ### Logging (Loki + Promtail + Grafana)
