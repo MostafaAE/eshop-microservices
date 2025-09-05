@@ -13,7 +13,7 @@ builder.Services.AddMediatR(config =>
     config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
-builder.Services.AddAppObservability(builder.Configuration);
+builder.AddAppObservability();
 
 builder.Services.AddMarten(opts =>
 {

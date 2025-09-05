@@ -22,7 +22,7 @@ builder.Services.AddRefitClient<IOrderingService>()
         c.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]!);
     });
 
-builder.Services.AddAppObservability(builder.Configuration);
+builder.AddAppObservability();
 
 var app = builder.Build();
 

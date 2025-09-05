@@ -10,7 +10,7 @@ builder.Services.AddGrpc();
 builder.Services.AddDbContext<DiscountContext>(opts =>
         opts.UseSqlite(builder.Configuration.GetConnectionString("Database")));
 
-builder.Services.AddAppObservability(builder.Configuration);
+builder.AddAppObservability();
 
 var app = builder.Build();
 

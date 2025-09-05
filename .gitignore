@@ -398,3 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 /src/Services/Discount/Discount.Grpc/discountdb-shm
 /src/Services/Discount/Discount.Grpc/discountdb-wal
+/src/Observability/loki-data
+/src/Observability/loki-wal
