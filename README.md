@@ -1,6 +1,6 @@
 # A Microservices E-Commerce Platform
 
-![High-Level System Architecture](https://github.com/user-attachments/assets/8f33980b-bfea-4111-ab6b-b6ed9b69f36e)
+![High-Level System Architecture](https://github.com/user-attachments/assets/8897be45-0ad0-41f7-b1e5-99fa910c6980)
 
 ## Project Overview
 This project implements an e-commerce platform with modular microservices (Catalog, Basket, Discount, Ordering, API Gateway, and WebUI). It integrates event-driven messaging, polyglot persistence, and full observability (metrics, logs, and traces) using OpenTelemetry and modern observability tools.
@@ -66,7 +66,7 @@ The observability architecture follows the **OpenTelemetry Collector pattern** w
 - **Loki** receives structured logs for log aggregation and search
 - **Prometheus** scrapes metrics from the OpenTelemetry Collector for monitoring
 - **Grafana** provides unified dashboards for visualizing metrics and logs with automatic correlation
-![Observability Architecture](https://github.com/user-attachments/assets/d056ae1b-c8e8-4efb-8520-037cb599c74b)
+![Observability Architecture](https://github.com/user-attachments/assets/83588ffa-8e5d-4c7c-895a-b8a0ab99267b)
   
 ### Metrics (OpenTelemetry → Prometheus → Grafana)
 * **OpenTelemetry** collects metrics from all microservices using auto-instrumentation
