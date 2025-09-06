@@ -1,6 +1,6 @@
 # A Microservices E-Commerce Platform
 
-![microservices](https://github.com/aspnetrun/run-aspnetcore-microservices/assets/1147445/efe5e688-67f2-4ddd-af37-d9d3658aede4)
+![High-Level System Architecture](https://github.com/user-attachments/assets/8f33980b-bfea-4111-ab6b-b6ed9b69f36e)
 
 ## Project Overview
 This project implements an e-commerce platform with modular microservices (Catalog, Basket, Discount, Ordering, API Gateway, and WebUI). It integrates event-driven messaging, polyglot persistence, and full observability (metrics, logs, and traces) using OpenTelemetry and modern observability tools.
@@ -66,6 +66,7 @@ The observability architecture follows the **OpenTelemetry Collector pattern** w
 - **Loki** receives structured logs for log aggregation and search
 - **Prometheus** scrapes metrics from the OpenTelemetry Collector for monitoring
 - **Grafana** provides unified dashboards for visualizing metrics and logs with automatic correlation
+![Observability Architecture](https://github.com/user-attachments/assets/d056ae1b-c8e8-4efb-8520-037cb599c74b)
   
 ### Metrics (OpenTelemetry → Prometheus → Grafana)
 * **OpenTelemetry** collects metrics from all microservices using auto-instrumentation
