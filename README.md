@@ -1,6 +1,6 @@
 # A Microservices E-Commerce Platform
 
-![High-Level System Architecture](https://github.com/user-attachments/assets/8897be45-0ad0-41f7-b1e5-99fa910c6980)
+![High-Level System Architecture](https://github.com/user-attachments/assets/403dbc04-6a59-4673-950c-373aaa4d4dde)
 
 ## Project Overview
 This project implements an e-commerce platform with modular microservices (Catalog, Basket, Discount, Ordering, API Gateway, and WebUI). It integrates event-driven messaging, polyglot persistence, and full observability (metrics, logs, and traces) using OpenTelemetry and modern observability tools.
